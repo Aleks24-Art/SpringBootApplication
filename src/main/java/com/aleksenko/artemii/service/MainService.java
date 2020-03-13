@@ -1,18 +1,16 @@
 package com.aleksenko.artemii.service;
 
-import com.aleksenko.artemii.model.Album;
-import com.aleksenko.artemii.model.Track;
-import org.json.JSONArray;
-import org.json.JSONObject;
+
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponents;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Aleksenko Artemii on 01.03.2020
@@ -20,11 +18,16 @@ import java.util.List;
  */
 @Component
 @Service
-public class MainService {
-    public String getHttpResponseAboutAlbum(String artist, String album, String format) {
+public class MainService implements AppService {
+    /**
+     * Field to log info in file
+     */
+    private final Logger logger = Logger.getLogger(MainService.class);
+
+    public String getHttpResponseAboutAlbum(UriComponents uri) {
         HttpURLConnection connection = null;
         String line;
-        String url = "http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=310d22580d72a57938fc4d7f713a0fab&artist=" + artist + "&album=" + album + "&format=" + format;
+        String url = uri.toString();
         StringBuilder sb = new StringBuilder();
         try {
             connection = (HttpURLConnection) new URL(url).openConnection();
@@ -45,42 +48,14 @@ public class MainService {
             }
 
         } catch (Throwable cause) {
-            cause.printStackTrace();
+            logger.error("Exception while http request ", cause);
         } finally {
+            logger.info("Closing resources");
             if(connection != null) {
                 connection.disconnect();
             }
         }
         return sb.toString();
-    }
-
-    public Album getAlbumInfo(String s) {
-        Album album = new Album();
-        JSONObject json = new JSONObject(s);
-        album.setName(json.getJSONObject("album").getString("name"));
-        album.setArtist(json.getJSONObject("album").getString("artist"));
-        album.setTrackList(getTrackList(json.getJSONObject("album").getJSONObject("tracks").getJSONArray("track")));
-        album.setGenre(getGenreFromTags(json.getJSONObject("album").getJSONObject("tags").getJSONArray("tag")));
-        return  album;
-    }
-
-    private List<Track> getTrackList(JSONArray array) {
-        Track track;
-        List<Track> trackList = new ArrayList<>();
-        for (int i = 0; i < array.length(); i++) {
-            track = new Track();
-            track.setName(array.getJSONObject(i).getString("name"));
-            track.setDuration(array.getJSONObject(i).getInt("duration"));
-            trackList.add(track);
-        }
-        return trackList;
-    }
-    private String getGenreFromTags(JSONArray o) {
-        if (o.length() >= 1) {
-            return o.getJSONObject(0).getString("name");
-        } else {
-            return "Genre is unknown";
-        }
     }
 
 }
