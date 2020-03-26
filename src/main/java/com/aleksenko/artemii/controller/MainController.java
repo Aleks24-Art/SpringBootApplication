@@ -7,15 +7,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
 /**
  * @author Aleksenko Artemii on 29.02.2020
@@ -39,17 +31,9 @@ public class MainController {
 
     @RequestMapping(value = {"/info/{artist}/{album}"}, method = RequestMethod.GET, produces = {"application/json", "application/xml"})
     public ResponseEntity<?> getUrl(@PathVariable(name = "artist") String artist,
-                                         @PathVariable(name = "album") String album,
-                                         Model model) {
-        String uri = "http://ws.audioscrobbler.com/2.0/?method=album.getinfo&" +
-                "api_key=310d22580d72a57938fc4d7f713a0fab" +
-                "&artist={artist}&album={album}&format={format}";
-        UriComponents uriComponents = UriComponentsBuilder.fromUriString(uri).build();
-        String someInfo = service.getHttpResponseAboutAlbum(uriComponents);
-        model.addAttribute("textWithOutPars", someInfo);
-        someAlbum = parser.parseJSON(someInfo);
-        System.out.println(someAlbum);
-        model.addAttribute("answer", someAlbum);
+                                         @PathVariable(name = "album") String album) {
+        Album someAlbum = parser.parseJSON(service.getHttpResponseAboutAlbum(artist, album));
+        service.createDocs(someAlbum);
         return ResponseEntity.ok(someAlbum);
     }
 
@@ -77,11 +61,4 @@ public class MainController {
         this.parser = parser;
     }
 
-    private void clearFile(File file) {
-        try(BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
-            bw.write("");
-        } catch (IOException e) {
-            logger.error("An exception occurred while writing in the file ", e);
-        }
-    }
 }

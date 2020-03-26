@@ -1,5 +1,8 @@
 package com.aleksenko.artemii.model;
 
+import org.springframework.stereotype.Component;
+
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
@@ -7,11 +10,12 @@ import java.util.Objects;
  * @author Aleksenko Artemii on 01.03.2020
  * @version 1.0
  */
-
-public class Album {
+@Component
+public class Album implements Serializable {
     private String name;
-    private String genre;
     private String artist;
+    private String genre;
+    private String poster;
     private List<Track> trackList;
 
     public String getName() {
@@ -46,6 +50,14 @@ public class Album {
         this.trackList = trackList;
     }
 
+    public String getPoster() {
+        return poster;
+    }
+
+    public void setPoster(String poster) {
+        this.poster = poster;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -54,12 +66,13 @@ public class Album {
         return Objects.equals(getName(), album.getName()) &&
                 Objects.equals(getGenre(), album.getGenre()) &&
                 Objects.equals(getArtist(), album.getArtist()) &&
-                Objects.equals(getTrackList(), album.getTrackList());
+                Objects.equals(getTrackList(), album.getTrackList()) &&
+                Objects.equals(getPoster(), album.getPoster());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getGenre(), getArtist(), getTrackList());
+        return Objects.hash(getName(), getGenre(), getArtist(), getTrackList(), getPoster());
     }
 
     @Override
@@ -68,6 +81,6 @@ public class Album {
         for (int i = 0; i < trackList.size(); i++) {
             tracks += (i + 1)  + " " + trackList.get(i).toString() + "\n";
         }
-        return "Album = " + name + "\nGenre = " + genre + "\nArtist = " + artist + "\nTracks: \n" + tracks;
+        return "Album = " + name + "\nGenre = " + genre + "\nArtist = " + artist + "\nPoster = "+ poster + "\nTracks: \n" + tracks;
     }
 }
