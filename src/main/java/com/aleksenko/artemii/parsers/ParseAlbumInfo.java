@@ -1,8 +1,9 @@
-package com.aleksenko.artemii.model;
-
+package com.aleksenko.artemii.parsers;
+import com.aleksenko.artemii.model.Album;
+import com.aleksenko.artemii.model.Track;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,13 +11,22 @@ import java.util.List;
 /**
  * @author Aleksenko Artemii on 05.03.2020
  * @version 1.0
+ *
+ * Class for parsing album info
+ * @see Album
  */
-@Component
+
+@Service
 public class ParseAlbumInfo {
 
-    public Album parseJSON(String s) {
+    /**
+     * Method to pars JSON to Album POJO
+     * @param info - JSON
+     * @return Album POJO
+     */
+    public Album parseJSON(String info) {
         Album album = new Album();
-        JSONObject json = new JSONObject(s);
+        JSONObject json = new JSONObject(info);
         album.setName(json.getJSONObject("album").getString("name"));
         album.setArtist(json.getJSONObject("album").getString("artist"));
         album.setTrackList(getTrackList(json.getJSONObject("album").getJSONObject("tracks").getJSONArray("track")));

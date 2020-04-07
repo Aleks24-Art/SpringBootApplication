@@ -5,6 +5,10 @@ import java.util.Objects;
 /**
  * @author Aleksenko Artemii on 02.03.2020
  * @version 1.0
+ *
+ * Default POJO class with all track info
+ * Used in
+ * @see Album
  */
 public class Track {
     private String name;
@@ -26,15 +30,6 @@ public class Track {
         this.duration = duration;
     }
 
-
-    @Override
-    public String toString() {
-        return "Track" +
-                "name='" + name + '\'' +
-                ", duration=" + duration +
-                '}';
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -47,5 +42,13 @@ public class Track {
     @Override
     public int hashCode() {
         return Objects.hash(getName(), getDuration());
+    }
+
+    @Override
+    public String toString() {
+        return "Track" +
+                "name='" + name + '\'' +
+                ", duration=" + duration +
+                '}';
     }
 }

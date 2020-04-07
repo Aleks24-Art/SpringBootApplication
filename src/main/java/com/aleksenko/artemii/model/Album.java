@@ -9,9 +9,12 @@ import java.util.Objects;
 /**
  * @author Aleksenko Artemii on 01.03.2020
  * @version 1.0
+ *
+ * Default POJO class with all album info
  */
 @Component
 public class Album implements Serializable {
+
     private String name;
     private String artist;
     private String genre;
