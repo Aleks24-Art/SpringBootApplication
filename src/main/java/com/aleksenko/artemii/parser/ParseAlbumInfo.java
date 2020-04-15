@@ -1,4 +1,4 @@
-package com.aleksenko.artemii.parsers;
+package com.aleksenko.artemii.parser;
 import com.aleksenko.artemii.model.Album;
 import com.aleksenko.artemii.model.Track;
 import org.json.JSONArray;
@@ -11,8 +11,7 @@ import java.util.List;
 /**
  * @author Aleksenko Artemii on 05.03.2020
  * @version 1.0
- *
- * Class for parsing album info
+ * Class-parser for album info
  * @see Album
  */
 
@@ -20,7 +19,7 @@ import java.util.List;
 public class ParseAlbumInfo {
 
     /**
-     * Method to pars JSON to Album POJO
+     * Pars JSON to Album POJO
      * @param info - JSON
      * @return Album POJO
      */

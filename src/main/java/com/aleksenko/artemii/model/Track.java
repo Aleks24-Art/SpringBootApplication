@@ -13,6 +13,7 @@ import java.util.Objects;
 public class Track {
     private String name;
     private int duration;
+    private String url;
 
     public String getName() {
         return name;
@@ -30,25 +31,35 @@ public class Track {
         this.duration = duration;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Track)) return false;
         Track track = (Track) o;
         return getDuration() == track.getDuration() &&
-                Objects.equals(getName(), track.getName());
+                Objects.equals(getName(), track.getName()) &&
+                Objects.equals(getUrl(), track.getUrl());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getDuration());
+        return Objects.hash(getName(), getDuration(), getUrl());
     }
 
     @Override
     public String toString() {
-        return "Track" +
+        return "Track{" +
                 "name='" + name + '\'' +
                 ", duration=" + duration +
+                ", url='" + url + '\'' +
                 '}';
     }
 }
